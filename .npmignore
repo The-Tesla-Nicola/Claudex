@@ -3,8 +3,7 @@ node_modules/
 .pnp
 .pnp.js
 
-# Build output
-dist/
+# Build output (keep dist for publishing)
 build/
 *.mjs.map
 
@@ -21,11 +20,6 @@ build/
 .claude-code/
 *.pem
 *.key
-.credentials/
-.personal/
-
-# Docs (published separately, not in git)
-docs/
 
 # Logs
 logs/
@@ -47,6 +41,7 @@ desktop.ini
 
 # Editor
 .vscode/settings.json
+.vscode/extensions.json
 .idea/
 *.swp
 *.swo
@@ -74,3 +69,19 @@ bun.lockb
 
 # Docker
 .dockerignore
+
+# Development scripts (not needed in package)
+scripts/
+.eslintrc*
+.prettierrc*
+.vscode-test/
+
+# Docs (optional - remove if you want docs in package)
+docs/
+ANDROID_INSTALL.md
+
+# GitHub workflows (not needed in package)
+.github/
+
+# Source maps
+*.map

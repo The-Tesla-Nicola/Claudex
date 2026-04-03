@@ -273,22 +273,14 @@ export function printStartupScreen(): void {
   // ── Dev credit line ──
   out.push('')
   out.push(
-    `  ${DIM}${rgb(...theme.dim)}dev ${RESET}` +
-    `${BOLD}${rgb(...theme.accent)}Lakshmikanthan K${RESET}` +
-    `${DIM}${rgb(...theme.dim)}  ·  github.com/l3tchupkt${RESET}`,
-  )
-  out.push('')
-
-  // ── Tagline ──
-  out.push(
-    `  ${rgb(...theme.accent)}\u2726${RESET} ` +
-    `${rgb(...theme.cream)}${theme.tagline}${RESET} ` +
-    `${rgb(...theme.accent)}\u2726${RESET}`,
+    `  ${DIM}${rgb(...theme.dim)}// dev: ${RESET}` +
+    `${rgb(...theme.cream)}Lakshmikanthan K${RESET}` +
+    `${DIM}${rgb(...theme.dim)} · github.com/l3tchupkt${RESET}`,
   )
   out.push('')
 
   // ── Provider info box ──
-  out.push(`${rgb(...theme.border)}\u2554${'\u2550'.repeat(W - 2)}\u2557${RESET}`)
+  out.push(`${rgb(...theme.border)}╔${'═'.repeat(W - 2)}╗${RESET}`)
 
   const lbl = (k: string, v: string, c: RGB = theme.cream): [string, number] => {
     const padK = k.padEnd(9)
