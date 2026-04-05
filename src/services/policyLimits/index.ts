@@ -499,7 +499,7 @@ async function fetchAndLoadPolicyLimits(): Promise<
  * and the policy cache is unavailable. Without this, a cache miss or network
  * timeout would silently re-enable these features for HIPAA orgs.
  */
-const ESSENTIAL_TRAFFIC_DENY_ON_MISS = new Set(['allow_product_feedback'])
+const ESSENTIAL_TRAFFIC_DENY_ON_MISS = new Set<string>([])
 
 /**
  * Check if a specific policy is allowed

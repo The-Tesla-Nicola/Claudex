@@ -1,5 +1,5 @@
 import { createElement, type ReactNode } from 'react'
-import { ThemeProvider } from './components/design-system/ThemeProvider.js'
+import { ThemeProvider } from './components/theme/ThemeProvider.js'
 import inkRender, {
   type Instance,
   createRoot as inkCreateRoot,
@@ -30,21 +30,17 @@ export async function createRoot(options?: RenderOptions): Promise<Root> {
   }
 }
 
-export { color } from './components/design-system/color.js'
-export type { Props as BoxProps } from './components/design-system/ThemedBox.js'
-export { default as Box } from './components/design-system/ThemedBox.js'
-export type { Props as TextProps } from './components/design-system/ThemedText.js'
-export { default as Text } from './components/design-system/ThemedText.js'
-export {
-  ThemeProvider,
-  usePreviewTheme,
-  useTheme,
-  useThemeSetting,
-} from './components/design-system/ThemeProvider.js'
+export { color } from './components/theme/color.js'
+export type { Props as BoxProps } from './components/theme/ThemedBox.js'
+export { default as ThemedBox } from './components/theme/ThemedBox.js'
+export type { Props as TextProps } from './components/theme/ThemedText.js'
+export { default as ThemedText } from './components/theme/ThemedText.js'
+export { ThemeProvider, useThemeSetting, usePreviewTheme, useTheme } from './components/theme/ThemeProvider.js'
 export { Ansi } from './ink/Ansi.js'
 export type { Props as AppProps } from './ink/components/AppContext.js'
 export type { Props as BaseBoxProps } from './ink/components/Box.js'
 export { default as BaseBox } from './ink/components/Box.js'
+export { default as Box } from './ink/components/Box.js'
 export type {
   ButtonState,
   Props as ButtonProps,
@@ -60,6 +56,7 @@ export { default as Spacer } from './ink/components/Spacer.js'
 export type { Props as StdinProps } from './ink/components/StdinContext.js'
 export type { Props as BaseTextProps } from './ink/components/Text.js'
 export { default as BaseText } from './ink/components/Text.js'
+export { default as Text } from './ink/components/Text.js'
 export type { DOMElement } from './ink/dom.js'
 export { ClickEvent } from './ink/events/click-event.js'
 export { EventEmitter } from './ink/events/emitter.js'

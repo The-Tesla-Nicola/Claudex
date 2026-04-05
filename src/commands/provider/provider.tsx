@@ -37,6 +37,7 @@ import {
   type ProfileFile,
   type ProviderProfile,
 } from '../../utils/providerProfile.js'
+import { storeProviderCredentials } from '../../utils/credentialManager.js'
 import {
   getGoalDefaultOpenAIModel,
   normalizeRecommendationGoal,
@@ -44,7 +45,7 @@ import {
   recommendOllamaModel,
   type RecommendationGoal,
 } from '../../utils/providerRecommendation.js'
-import { hasLocalOllama, listOllamaModels } from '../../utils/providerDiscovery.js'
+import { hasLocalOllama, listOllamaModels, getOllamaChatBaseUrl } from '../../utils/providerDiscovery.js'
 
 type ProviderChoice = 'auto' | ProviderProfile | 'clear'
 
@@ -117,7 +118,7 @@ function getSafeDisplayValue(
   fallback = '(not set)',
 ): string {
   return (
-    redactSecretValueForDisplay(value, processEnv, profileEnv) ?? fallback
+    redactSecretValueForDisplay(value, processEnv as any, profileEnv) ?? fallback
   )
 }
 
@@ -125,19 +126,19 @@ export function getProviderWizardDefaults(
   processEnv: NodeJS.ProcessEnv = process.env,
 ): ProviderWizardDefaults {
   const safeOpenAIModel =
-    sanitizeProviderConfigValue(processEnv.OPENAI_MODEL, processEnv) ||
+    sanitizeProviderConfigValue(processEnv.OPENAI_MODEL, processEnv as any) ||
     'gpt-4o'
   const safeOpenAIBaseUrl =
-    sanitizeProviderConfigValue(processEnv.OPENAI_BASE_URL, processEnv) ||
+    sanitizeProviderConfigValue(processEnv.OPENAI_BASE_URL, processEnv as any) ||
     DEFAULT_OPENAI_BASE_URL
   const safeGeminiModel =
-    sanitizeProviderConfigValue(processEnv.GEMINI_MODEL, processEnv) ||
+    sanitizeProviderConfigValue(processEnv.GEMINI_MODEL, processEnv as any) ||
     DEFAULT_GEMINI_MODEL
   const safeNvidiaModel =
-    sanitizeProviderConfigValue(processEnv.NVIDIA_MODEL, processEnv) ||
+    sanitizeProviderConfigValue(processEnv.NVIDIA_MODEL, processEnv as any) ||
     'moonshotai/kimi-k2-instruct'
   const safeNvidiaBaseUrl =
-    sanitizeProviderConfigValue(processEnv.NVIDIA_BASE_URL, processEnv) ||
+    sanitizeProviderConfigValue(processEnv.NVIDIA_BASE_URL, processEnv as any) ||
     'https://integrate.api.nvidia.com/v1'
 
   return {
@@ -367,6 +368,18 @@ function finishProfileSave(
   try {
     const profileFile = createProfileFile(profile, env)
     const filePath = saveProfileFile(profileFile)
+    
+    // Also store credentials in global config for persistence
+    const apiKey = env.OPENAI_API_KEY || env.GEMINI_API_KEY || env.NVIDIA_API_KEY || env.CODEX_API_KEY
+    if (apiKey) {
+      storeProviderCredentials({
+        provider: profile,
+        apiKey,
+        baseUrl: env.OPENAI_BASE_URL || env.GEMINI_BASE_URL || env.NVIDIA_BASE_URL,
+        model: env.OPENAI_MODEL || env.GEMINI_MODEL || env.NVIDIA_MODEL,
+      })
+    }
+    
     onDone(buildProfileSaveMessage(profile, env, filePath), {
       display: 'system',
     })
@@ -658,7 +671,7 @@ function AutoRecommendationStep({
               { label: 'Back', value: 'back' },
               { label: 'Cancel', value: 'cancel' },
             ]}
-            onChange={value => (value === 'back' ? onBack() : onCancel())}
+            onChange={(value: string) => (value === 'back' ? onBack() : onCancel())}
             onCancel={onCancel}
           />
         </Box>
@@ -681,7 +694,7 @@ function AutoRecommendationStep({
               { label: 'Back', value: 'back' },
               { label: 'Cancel', value: 'cancel' },
             ]}
-            onChange={value => {
+            onChange={(value: string) => {
               if (value === 'continue') {
                 onNeedOpenAI(status.defaultModel)
               } else if (value === 'back') {
@@ -714,7 +727,7 @@ function AutoRecommendationStep({
             { label: 'Back', value: 'back' },
             { label: 'Cancel', value: 'cancel' },
           ]}
-          onChange={value => {
+          onChange={(value: string) => {
             if (value === 'save') {
               onSave(
                 'ollama',
@@ -816,7 +829,7 @@ function OllamaModelStep({
               { label: 'Back', value: 'back' },
               { label: 'Cancel', value: 'cancel' },
             ]}
-            onChange={value => (value === 'back' ? onBack() : onCancel())}
+            onChange={(value: string) => (value === 'back' ? onBack() : onCancel())}
             onCancel={onCancel}
           />
         </Box>
@@ -837,7 +850,7 @@ function OllamaModelStep({
           defaultFocusValue={status.defaultValue}
           inlineDescriptions
           visibleOptionCount={Math.min(8, status.options.length)}
-          onChange={value => {
+          onChange={(value: string) => {
             onSave(
               'ollama',
               buildOllamaProfileEnv(value, {
@@ -873,7 +886,7 @@ function CodexCredentialStep({
               { label: 'Back', value: 'back' },
               { label: 'Cancel', value: 'cancel' },
             ]}
-            onChange={value => (value === 'back' ? onBack() : onCancel())}
+            onChange={(value: string) => (value === 'back' ? onBack() : onCancel())}
             onCancel={onCancel}
           />
         </Box>
@@ -907,7 +920,7 @@ function CodexCredentialStep({
           defaultFocusValue="codexplan"
           inlineDescriptions
           visibleOptionCount={options.length}
-          onChange={value => {
+          onChange={(value: string) => {
             const env = buildCodexProfileEnv({
               model: value,
               processEnv: process.env,

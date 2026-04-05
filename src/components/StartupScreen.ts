@@ -2,12 +2,15 @@
  * Claudex startup screen — banner, themes, provider info box.
  * Called once at CLI startup before the Ink UI renders.
  *
- * Theme selection:
- *   CLAUDEX_THEME=sunset    — warm orange-to-rust (default)
+ * Theme selection (unified with /theme command):
+ *   CLAUDEX_THEME=dark      — default dark mode
+ *   CLAUDEX_THEME=light     — light mode
+ *   CLAUDEX_THEME=sunset    — warm orange-to-rust
  *   CLAUDEX_THEME=ocean     — deep teal to cyan
  *   CLAUDEX_THEME=aurora    — green to violet northern lights
  *   CLAUDEX_THEME=neon      — hot pink to electric blue
  *   CLAUDEX_THEME=mono      — clean white-to-grey monochrome
+ *   CLAUDEX_THEME=matrix    — green terminal hacker style
  */
 
 declare const MACRO: { VERSION: string; DISPLAY_VERSION?: string }

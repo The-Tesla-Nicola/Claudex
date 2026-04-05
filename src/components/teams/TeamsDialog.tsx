@@ -28,7 +28,7 @@ import { listTasks, type Task, unassignTeammateTasks } from '../../utils/tasks.j
 import { getTeammateStatuses, type TeammateStatus, type TeamSummary } from '../../utils/teamDiscovery.js';
 import { createModeSetRequestMessage, sendShutdownRequestToMailbox, writeToMailbox } from '../../utils/teammateMailbox.js';
 import { Dialog } from '../design-system/Dialog.js';
-import ThemedText from '../design-system/ThemedText.js';
+import ThemedText from '../theme/ThemedText.js';
 type Props = {
   initialTeams?: TeamSummary[];
   onDone: () => void;

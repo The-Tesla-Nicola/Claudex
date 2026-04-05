@@ -1,11 +1,14 @@
 import { feature } from 'bun:bundle';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { setMainLoopModelOverride } from '../bootstrap/state.js';
-import { type BridgePermissionCallbacks, type BridgePermissionResponse, isBridgePermissionResponse } from '../bridge/bridgePermissionCallbacks.js';
-import { buildBridgeConnectUrl } from '../bridge/bridgeStatusUtil.js';
-import { extractInboundMessageFields } from '../bridge/inboundMessages.js';
+// bridgePermissionCallbacks removed
+type BridgePermissionCallbacks = Record<string, unknown>
+type BridgePermissionResponse = Record<string, unknown>
+const isBridgePermissionResponse = (_v: unknown): _v is BridgePermissionResponse => false
+const buildBridgeConnectUrl = (..._args: unknown[]): string => ''
+const extractInboundMessageFields = (_msg: unknown): { content: unknown; uuid: string } | null => null
 import type { BridgeState, ReplBridgeHandle } from '../bridge/replBridge.js';
-import { setReplBridgeHandle } from '../bridge/replBridgeHandle.js';
+const setReplBridgeHandle = (_h: unknown): void => {}
 import type { Command } from '../commands.js';
 import { getSlashCommandToolSkills, isBridgeSafeCommand } from '../commands.js';
 import { getRemoteSessionUrl } from '../constants/product.js';

@@ -44,7 +44,11 @@ import {
   initTaskOutputAsSymlink,
 } from '../../utils/task/diskOutput.js'
 import { getCurrentWorktreeSession } from '../../utils/worktree.js'
-import { clearSessionCaches } from './caches.js'
+
+// Stub function - caches.js does not exist
+function clearSessionCaches(_preservedAgentIds?: Set<string>): void {
+  // No-op: cache clearing feature removed
+}
 
 export async function clearConversation({
   setMessages,

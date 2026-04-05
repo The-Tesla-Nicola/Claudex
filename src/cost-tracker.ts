@@ -98,10 +98,10 @@ export function getStoredSessionCosts(
   let modelUsage: { [modelName: string]: ModelUsage } | undefined
   if (projectConfig.lastModelUsage) {
     modelUsage = Object.fromEntries(
-      Object.entries(projectConfig.lastModelUsage).map(([model, usage]) => [
+      Object.entries(projectConfig.lastModelUsage).map(([model, modelUsageData]) => [
         model,
         {
-          ...usage,
+          ...modelUsageData,
           contextWindow: getContextWindowForModel(model, getSdkBetas()),
           maxOutputTokens: getModelMaxOutputTokens(model).default,
         },

@@ -5,7 +5,7 @@ import { LIGHTNING_BOLT } from '../constants/figures.js';
 import { Text } from '../ink.js';
 import { getGlobalConfig } from '../utils/config.js';
 import { resolveThemeSetting } from '../utils/systemTheme.js';
-import { color } from './design-system/color.js';
+import { color } from './theme/color.js';
 type Props = {
   cooldown?: boolean;
 };

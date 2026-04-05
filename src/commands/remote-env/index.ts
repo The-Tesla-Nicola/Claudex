@@ -1,4 +1,4 @@
-import type { Command } from '../../commands.js'
+import type { Command, LocalJSXCommandModule } from '../../commands.js'
 import { isPolicyAllowed } from '../../services/policyLimits/index.js'
 import { isClaudeAISubscriber } from '../../utils/auth.js'
 
@@ -11,5 +11,6 @@ export default {
   get isHidden() {
     return !isClaudeAISubscriber() || !isPolicyAllowed('allow_remote_sessions')
   },
-  load: () => import('./remote-env.js'),
+  // Feature disabled - remote-env.tsx does not exist
+  load: () => Promise.resolve({ call: () => Promise.resolve(null) } as unknown as LocalJSXCommandModule),
 } satisfies Command

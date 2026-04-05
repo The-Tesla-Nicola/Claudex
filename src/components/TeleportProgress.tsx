@@ -5,7 +5,12 @@ import { useState } from 'react';
 import type { Root } from '../ink.js';
 import { Box, Text, useAnimationFrame } from '../ink.js';
 import { AppStateProvider } from '../state/AppState.js';
-import { checkOutTeleportedSessionBranch, processMessagesForTeleportResume, type TeleportProgressStep, type TeleportResult, teleportResumeCodeSession } from '../utils/teleport.js';
+// teleport removed
+type TeleportProgressStep = string
+type TeleportResult = { success: boolean }
+const teleportResumeCodeSession = async (_id: string): Promise<TeleportResult> => ({ success: false })
+const checkOutTeleportedSessionBranch = async (): Promise<void> => {}
+const processMessagesForTeleportResume = (_msgs: unknown[]): unknown[] => []
 type Props = {
   currentStep: TeleportProgressStep;
   sessionId?: string;

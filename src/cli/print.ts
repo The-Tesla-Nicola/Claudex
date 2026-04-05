@@ -136,9 +136,10 @@ import reject from 'lodash-es/reject.js'
 import { isPolicyAllowed } from 'src/services/policyLimits/index.js'
 import type { ReplBridgeHandle } from 'src/bridge/replBridge.js'
 import { getRemoteSessionUrl } from 'src/constants/product.js'
-import { buildBridgeConnectUrl } from 'src/bridge/bridgeStatusUtil.js'
-import { extractInboundMessageFields } from 'src/bridge/inboundMessages.js'
-import { resolveAndPrepend } from 'src/bridge/inboundAttachments.js'
+// bridge modules removed — stub out the functions used below
+const buildBridgeConnectUrl = (..._args: unknown[]): string => ''
+const extractInboundMessageFields = (_msg: unknown): { content: unknown; uuid: string } | null => null
+const resolveAndPrepend = async (_msg: unknown, content: unknown): Promise<unknown> => content
 import type { CanUseToolFn } from 'src/hooks/useCanUseTool.js'
 import { hasPermissionsToUseTool } from 'src/utils/permissions/permissions.js'
 import { safeParseJSON } from 'src/utils/json.js'

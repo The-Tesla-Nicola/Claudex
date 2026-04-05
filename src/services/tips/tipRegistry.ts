@@ -8,8 +8,9 @@ import {
 } from 'src/utils/settings/settings.js'
 import { shouldOfferTerminalSetup } from '../../commands/terminalSetup/terminalSetup.js'
 import { getDesktopUpsellConfig } from '../../components/DesktopUpsell/DesktopUpsellStartup.js'
-import { color } from '../../components/design-system/color.js'
-import { shouldShowOverageCreditUpsell } from '../../components/LogoV2/OverageCreditUpsell.js'
+import { color } from '../../components/theme/color.js'
+// OverageCreditUpsell removed
+const shouldShowOverageCreditUpsell = async (): Promise<boolean> => false
 import { getShortcutDisplay } from '../../keybindings/shortcutFormat.js'
 import { isKairosCronEnabled } from '../../tools/ScheduleCronTool/prompt.js'
 import { is1PApiCustomer } from '../../utils/auth.js'
@@ -44,10 +45,9 @@ import {
   isCustomTitleEnabled,
 } from '../../utils/sessionStorage.js'
 import { getFeatureValue_CACHED_MAY_BE_STALE } from '../analytics/growthbook.js'
-import {
-  formatGrantAmount,
-  getCachedOverageCreditGrant,
-} from '../api/overageCreditGrant.js'
+// overageCreditGrant removed
+const getCachedOverageCreditGrant = (): null => null
+const formatGrantAmount = (_info: unknown): string => ''
 import {
   checkCachedPassesEligibility,
   formatCreditAmount,

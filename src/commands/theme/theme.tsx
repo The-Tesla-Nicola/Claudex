@@ -2,15 +2,17 @@ import { c as _c } from "react-compiler-runtime";
 import * as React from 'react';
 import type { CommandResultDisplay } from '../../commands.js';
 import { Pane } from '../../components/design-system/Pane.js';
-import { ThemePicker } from '../../components/ThemePicker.js';
+import { ThemePicker } from '../../components/theme/ThemePicker.js';
 import { useTheme } from '../../ink.js';
 import type { LocalJSXCommandCall } from '../../types/command.js';
+import type { ThemeSetting } from '../../utils/theme.js';
+
 type Props = {
   onDone: (result?: string, options?: {
     display?: CommandResultDisplay;
   }) => void;
 };
-function ThemePickerCommand(t0) {
+function ThemePickerCommand(t0: Props) {
   const $ = _c(8);
   const {
     onDone
@@ -18,7 +20,7 @@ function ThemePickerCommand(t0) {
   const [, setTheme] = useTheme();
   let t1;
   if ($[0] !== onDone || $[1] !== setTheme) {
-    t1 = setting => {
+    t1 = (setting: ThemeSetting) => {
       setTheme(setting);
       onDone(`Theme set to ${setting}`);
     };

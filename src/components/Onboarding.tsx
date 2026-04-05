@@ -12,12 +12,13 @@ import { env } from '../utils/env.js';
 import { isRunningOnHomespace } from '../utils/envUtils.js';
 import { PreflightStep } from '../utils/preflightChecks.js';
 import type { ThemeSetting } from '../utils/theme.js';
+import { storeProviderCredentials, hasProviderCredentials } from '../utils/credentialManager.js';
 import { ApproveApiKey } from './ApproveApiKey.js';
 import { ConsoleOAuthFlow } from './ConsoleOAuthFlow.js';
 import { Select } from './CustomSelect/select.js';
 import { WelcomeV2 } from './LogoV2/WelcomeV2.js';
-import { ThemePicker } from './ThemePicker.js';
-type StepId = 'provider-select' | 'preflight' | 'theme' | 'oauth' | 'api-key' | 'terminal-setup';
+import { ThemePicker } from './theme/ThemePicker.js';
+type StepId = 'provider-select' | 'provider-api-key' | 'provider-model' | 'preflight' | 'theme' | 'oauth' | 'api-key' | 'terminal-setup';
 interface OnboardingStep {
   id: StepId;
   component: React.ReactNode;
@@ -32,6 +33,8 @@ export function Onboarding({
   const [skipOAuth, setSkipOAuth] = useState(false);
   const [oauthEnabled] = useState(() => isAnthropicAuthEnabled());
   const [selectedProvider, setSelectedProvider] = useState<'anthropic' | 'openai' | 'openrouter' | 'gemini' | 'nvidia' | 'ollama' | null>(null);
+  const [providerApiKey, setProviderApiKey] = useState('');
+  const [providerModel, setProviderModel] = useState('');
   const [theme, setTheme] = useTheme();
   const config = getGlobalConfig();
   useEffect(() => {

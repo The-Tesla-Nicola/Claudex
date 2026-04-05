@@ -8,7 +8,7 @@ import type { DOMElement } from '../ink/dom.js';
 import type { MatchPosition } from '../ink/render-to-screen.js';
 import { Box } from '../ink.js';
 import type { RenderableMessage } from '../types/message.js';
-import { TextHoverColorContext } from './design-system/ThemedText.js';
+import { TextHoverColorContext } from './theme/ThemedText.js';
 import { ScrollChromeContext } from './FullscreenLayout.js';
 
 // Rows of breathing room above the target when we scrollTo.

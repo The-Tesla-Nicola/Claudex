@@ -200,8 +200,6 @@ import { filterExistingPaths, getKnownPathsForRepo } from './utils/githubRepoPat
 import { clearPluginCache, loadAllPluginsCacheOnly } from './utils/plugins/pluginLoader.js';
 import { migrateChangelogFromConfig } from './utils/releaseNotes.js';
 import { SandboxManager } from './utils/sandbox/sandbox-adapter.js';
-import { fetchSession, prepareApiRequest } from './utils/teleport/api.js';
-import { checkOutTeleportedSessionBranch, processMessagesForTeleportResume, teleportToRemoteWithErrorHandling, validateGitState, validateSessionRepository } from './utils/teleport.js';
 import { shouldEnableThinkingByDefault, type ThinkingConfig } from './utils/thinking.js';
 import { initUser, resetUserCache } from './utils/user.js';
 import { getTmuxInstallInstructions, isTmuxAvailable, parsePRReference } from './utils/worktree.js';
@@ -2277,15 +2275,6 @@ async function run(): Promise<CommanderCommand> {
         resetUserCache();
         // Refresh GrowthBook after login to get updated feature flags (e.g., for claude.ai MCPs)
         refreshGrowthBookAfterAuthChange();
-        // Clear any stale trusted device token then enroll for Remote Control.
-        // Both self-gate on tengu_sessions_elevated_auth_enforcement internally
-        // — enrollTrustedDevice() via checkGate_CACHED_OR_BLOCKING (awaits
-        // the GrowthBook reinit above), clearTrustedDeviceToken() via the
-        // sync cached check (acceptable since clear is idempotent).
-        void import('./bridge/trustedDevice.js').then(m => {
-          m.clearTrustedDeviceToken();
-          return m.enrollTrustedDevice();
-        });
       }
 
       const orgValidation = await validateForceLoginOrg();
@@ -3091,10 +3080,8 @@ async function run(): Promise<CommanderCommand> {
         const resumeStart = performance.now();
 
         // Clear stale caches before resuming to ensure fresh file/skill discovery
-        const {
-          clearSessionCaches
-        } = await import('./commands/clear/caches.js');
-        clearSessionCaches();
+        // Stub - caches.js does not exist
+const clearSessionCaches = (_preservedAgentIds?: Set<string>): void => { };
         const result = await loadConversationForResume(undefined /* sessionId */, undefined /* sourceFile */);
         if (!result) {
           logEvent('tengu_continue', {
@@ -3342,9 +3329,7 @@ async function run(): Promise<CommanderCommand> {
       // Handle resume flow - from file (ant-only), session ID, or interactive selector
 
       // Clear stale caches before resuming to ensure fresh file/skill discovery
-      const {
-        clearSessionCaches
-      } = await import('./commands/clear/caches.js');
+      const clearSessionCaches = (_preservedAgentIds?: Set<string>): void => { };
       clearSessionCaches();
       let messages: MessageType[] | null = null;
       let processedResume: ProcessedResume | undefined = undefined;

@@ -9,6 +9,9 @@ import {
   buildStartupEnvFromProfile,
   redactSecretValueForDisplay,
 } from '../utils/providerProfile.js'
+import { applyStoredCredentials } from '../utils/credentialManager.js'
+
+declare const MACRO: { VERSION: string; DISPLAY_VERSION?: string }
 
 // Bugfix for corepack auto-pinning, which adds yarnpkg to peoples' package.jsons
 // eslint-disable-next-line custom-rules/no-top-level-side-effects
@@ -82,7 +85,7 @@ function getProviderValidationError(
         ? ` or put auth.json at ${credentials.authPath}`
         : ''
       const safeModel =
-        redactSecretValueForDisplay(request.requestedModel, env) ??
+        redactSecretValueForDisplay(request.requestedModel, env as any) ??
         'the requested model'
       return `Codex auth is required for ${safeModel}. Set CODEX_API_KEY${authHint}.`
     }
@@ -147,6 +150,8 @@ async function main(): Promise<void> {
       )
     } else {
       applyProfileEnvToProcessEnv(process.env, startupEnv)
+      // Also apply credentials from global config
+      applyStoredCredentials()
     }
   }
 
@@ -213,9 +218,7 @@ async function main(): Promise<void> {
   // workers are lean. If a worker kind needs configs/auth (assistant will),
   // it calls them inside its run() fn.
   if (feature('DAEMON') && args[0] === '--daemon-worker') {
-    const {
-      runDaemonWorker
-    } = await import('../daemon/workerRegistry.js');
+    const { runDaemonWorker } = await import('../daemon/workerRegistry.js') as any;
     await runDaemonWorker(args[1]);
     return;
   }
@@ -287,9 +290,7 @@ async function main(): Promise<void> {
       initSinks
     } = await import('../utils/sinks.js');
     initSinks();
-    const {
-      daemonMain
-    } = await import('../daemon/main.js');
+    const { daemonMain } = await import('../daemon/main.js') as any;
     await daemonMain(args.slice(1));
     return;
   }
@@ -303,7 +304,7 @@ async function main(): Promise<void> {
       enableConfigs
     } = await import('../utils/config.js');
     enableConfigs();
-    const bg = await import('../cli/bg.js');
+    const bg = await import('../cli/bg.js') as any;
     switch (args[0]) {
       case 'ps':
         await bg.psHandler(args.slice(1));
@@ -326,9 +327,7 @@ async function main(): Promise<void> {
   // Fast-path for template job commands.
   if (feature('TEMPLATES') && (args[0] === 'new' || args[0] === 'list' || args[0] === 'reply')) {
     profileCheckpoint('cli_templates_path');
-    const {
-      templatesMain
-    } = await import('../cli/handlers/templateJobs.js');
+    const { templatesMain } = await import('../cli/handlers/templateJobs.js') as any;
     await templatesMain(args);
     // process.exit (not return) — mountFleetView's Ink TUI can leave event
     // loop handles that prevent natural exit.
@@ -340,9 +339,7 @@ async function main(): Promise<void> {
   // feature() must stay inline for build-time dead code elimination.
   if (feature('BYOC_ENVIRONMENT_RUNNER') && args[0] === 'environment-runner') {
     profileCheckpoint('cli_environment_runner_path');
-    const {
-      environmentRunnerMain
-    } = await import('../environment-runner/main.js');
+    const { environmentRunnerMain } = await import('../environment-runner/main.js') as any;
     await environmentRunnerMain(args.slice(1));
     return;
   }
@@ -352,9 +349,7 @@ async function main(): Promise<void> {
   // heartbeat). feature() must stay inline for build-time dead code elimination.
   if (feature('SELF_HOSTED_RUNNER') && args[0] === 'self-hosted-runner') {
     profileCheckpoint('cli_self_hosted_runner_path');
-    const {
-      selfHostedRunnerMain
-    } = await import('../self-hosted-runner/main.js');
+    const { selfHostedRunnerMain } = await import('../self-hosted-runner/main.js') as any;
     await selfHostedRunnerMain(args.slice(1));
     return;
   }

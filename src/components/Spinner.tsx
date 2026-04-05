@@ -3,7 +3,6 @@ import { c as _c } from "react-compiler-runtime";
 import { Box, Text } from '../ink.js';
 import * as React from 'react';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { computeGlimmerIndex, computeShimmerSegments, SHIMMER_INTERVAL_MS } from '../bridge/bridgeStatusUtil.js';
 import { feature } from 'bun:bundle';
 import { getKairosActive, getUserMsgOptIn } from '../bootstrap/state.js';
 import { getFeatureValue_CACHED_MAY_BE_STALE } from '../services/analytics/growthbook.js';
@@ -369,8 +368,8 @@ function BriefSpinner(t0) {
   const verbWidth = t4;
   let t5;
   if ($[8] !== reducedMotion || $[9] !== showConnWarning || $[10] !== time || $[11] !== verb || $[12] !== verbWidth) {
-    const glimmerIndex = reducedMotion || showConnWarning ? -100 : computeGlimmerIndex(Math.floor(time / SHIMMER_INTERVAL_MS), verbWidth);
-    t5 = computeShimmerSegments(verb, glimmerIndex);
+  const glimmerIndex = reducedMotion || showConnWarning ? -100 : Math.floor(time / 120) % verbWidth;
+    t5 = { before: verb.slice(0, glimmerIndex), shimmer: verb.slice(glimmerIndex, glimmerIndex + 1), after: verb.slice(glimmerIndex + 1) };
     $[8] = reducedMotion;
     $[9] = showConnWarning;
     $[10] = time;

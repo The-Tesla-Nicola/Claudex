@@ -2,7 +2,9 @@ import axios from 'axios'
 import { getOauthConfig } from '../constants/oauth.js'
 import type { SDKMessage } from '../entrypoints/agentSdkTypes.js'
 import { logForDebugging } from '../utils/debug.js'
-import { getOAuthHeaders, prepareApiRequest } from '../utils/teleport/api.js'
+// teleport/api removed
+const getOAuthHeaders = (): Record<string, string> => {}
+const prepareApiRequest = (_url: string, _opts?: unknown): unknown => ({})
 
 export const HISTORY_PAGE_SIZE = 100
 

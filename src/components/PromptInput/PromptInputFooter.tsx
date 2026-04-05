@@ -1,8 +1,8 @@
 import { feature } from 'bun:bundle';
 import * as React from 'react';
 import { memo, type ReactNode, useMemo, useRef } from 'react';
-import { isBridgeEnabled } from '../../bridge/bridgeEnabled.js';
-import { getBridgeStatus } from '../../bridge/bridgeStatusUtil.js';
+const isBridgeEnabled = (): boolean => false
+const getBridgeStatus = (): string => 'disabled'
 import { useSetPromptOverlay } from '../../context/promptOverlayContext.js';
 import type { VerificationStatus } from '../../hooks/useApiKeyVerification.js';
 import type { IDESelection } from '../../hooks/useIdeSelection.js';

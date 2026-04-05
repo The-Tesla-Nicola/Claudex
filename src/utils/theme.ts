@@ -97,6 +97,12 @@ export const THEME_NAMES = [
   'dark-daltonized',
   'light-ansi',
   'dark-ansi',
+  'sunset',
+  'ocean',
+  'aurora',
+  'neon',
+  'mono',
+  'matrix',
 ] as const
 
 /** A renderable theme. Always resolvable to a concrete color palette. */
@@ -585,6 +591,115 @@ const darkTheme: Theme = {
   rainbow_violet_shimmer: 'rgb(230,180,210)',
 }
 
+// Sunset theme — warm orange-to-rust
+const sunsetTheme: Theme = {
+  ...darkTheme,
+  autoAccept: 'rgb(255,180,100)',
+  bashBorder: 'rgb(240,140,80)',
+  claude: 'rgb(217,119,87)',
+  claudeShimmer: 'rgb(255,160,120)',
+  permission: 'rgb(255,200,150)',
+  permissionShimmer: 'rgb(255,220,180)',
+  text: 'rgb(255,240,220)',
+  subtle: 'rgb(120,90,70)',
+  suggestion: 'rgb(255,200,150)',
+  background: 'rgb(200,120,80)',
+  success: 'rgb(120,180,100)',
+  error: 'rgb(220,80,80)',
+  warning: 'rgb(240,180,60)',
+}
+
+// Ocean theme — deep teal to electric cyan
+const oceanTheme: Theme = {
+  ...darkTheme,
+  autoAccept: 'rgb(0,200,220)',
+  bashBorder: 'rgb(0,160,180)',
+  claude: 'rgb(0,180,200)',
+  claudeShimmer: 'rgb(80,220,240)',
+  permission: 'rgb(120,220,240)',
+  permissionShimmer: 'rgb(160,240,255)',
+  text: 'rgb(220,250,255)',
+  subtle: 'rgb(40,80,90)',
+  suggestion: 'rgb(120,220,240)',
+  background: 'rgb(0,180,200)',
+  success: 'rgb(0,200,150)',
+  error: 'rgb(255,100,120)',
+  warning: 'rgb(255,200,80)',
+}
+
+// Aurora theme — green to violet northern lights
+const auroraTheme: Theme = {
+  ...darkTheme,
+  autoAccept: 'rgb(120,240,160)',
+  bashBorder: 'rgb(140,200,180)',
+  claude: 'rgb(160,200,140)',
+  claudeShimmer: 'rgb(180,240,200)',
+  permission: 'rgb(200,180,240)',
+  permissionShimmer: 'rgb(220,200,255)',
+  text: 'rgb(230,255,240)',
+  subtle: 'rgb(60,90,70)',
+  suggestion: 'rgb(200,180,240)',
+  background: 'rgb(140,200,120)',
+  success: 'rgb(100,220,140)',
+  error: 'rgb(240,100,160)',
+  warning: 'rgb(240,220,100)',
+}
+
+// Neon theme — hot pink to electric blue
+const neonTheme: Theme = {
+  ...darkTheme,
+  autoAccept: 'rgb(255,80,200)',
+  bashBorder: 'rgb(200,50,220)',
+  claude: 'rgb(255,100,180)',
+  claudeShimmer: 'rgb(255,140,220)',
+  permission: 'rgb(140,100,255)',
+  permissionShimmer: 'rgb(180,140,255)',
+  text: 'rgb(255,240,255)',
+  subtle: 'rgb(100,40,100)',
+  suggestion: 'rgb(140,100,255)',
+  background: 'rgb(200,80,255)',
+  success: 'rgb(0,255,150)',
+  error: 'rgb(255,50,100)',
+  warning: 'rgb(255,255,0)',
+}
+
+// Mono theme — clean white-to-grey monochrome
+const monoTheme: Theme = {
+  ...darkTheme,
+  autoAccept: 'rgb(200,200,200)',
+  bashBorder: 'rgb(160,160,160)',
+  claude: 'rgb(180,180,180)',
+  claudeShimmer: 'rgb(220,220,220)',
+  permission: 'rgb(180,180,180)',
+  permissionShimmer: 'rgb(210,210,210)',
+  text: 'rgb(240,240,240)',
+  subtle: 'rgb(80,80,80)',
+  suggestion: 'rgb(180,180,180)',
+  background: 'rgb(150,150,150)',
+  success: 'rgb(140,200,140)',
+  error: 'rgb(255,140,140)',
+  warning: 'rgb(255,220,140)',
+}
+
+// Matrix theme — green terminal hacker style
+const matrixTheme: Theme = {
+  ...darkTheme,
+  autoAccept: 'rgb(0,255,0)',
+  bashBorder: 'rgb(0,200,0)',
+  claude: 'rgb(50,255,50)',
+  claudeShimmer: 'rgb(100,255,100)',
+  permission: 'rgb(150,255,150)',
+  permissionShimmer: 'rgb(180,255,180)',
+  text: 'rgb(200,255,200)',
+  subtle: 'rgb(0,60,0)',
+  suggestion: 'rgb(150,255,150)',
+  background: 'rgb(0,255,100)',
+  success: 'rgb(0,255,100)',
+  error: 'rgb(255,50,50)',
+  warning: 'rgb(255,255,0)',
+  inverseText: 'rgb(0,20,0)',
+}
+
 /**
  * Dark daltonized theme (color-blind friendly) using explicit RGB values
  * to avoid inconsistencies from users' custom terminal ANSI color definitions
@@ -678,6 +793,18 @@ function getBuiltinTheme(themeName: string): Theme {
       return lightDaltonizedTheme
     case 'dark-daltonized':
       return darkDaltonizedTheme
+    case 'sunset':
+      return sunsetTheme
+    case 'ocean':
+      return oceanTheme
+    case 'aurora':
+      return auroraTheme
+    case 'neon':
+      return neonTheme
+    case 'mono':
+      return monoTheme
+    case 'matrix':
+      return matrixTheme
     default:
       return darkTheme
   }
@@ -692,7 +819,13 @@ export function getTheme(themeName: ThemeName): Theme {
     themeName === 'light-ansi' ||
     themeName === 'dark-ansi' ||
     themeName === 'light-daltonized' ||
-    themeName === 'dark-daltonized'
+    themeName === 'dark-daltonized' ||
+    themeName === 'sunset' ||
+    themeName === 'ocean' ||
+    themeName === 'aurora' ||
+    themeName === 'neon' ||
+    themeName === 'mono' ||
+    themeName === 'matrix'
   ) {
     return builtin
   }

@@ -4,7 +4,7 @@ import { toString as qrToString } from 'qrcode';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { getOriginalCwd } from '../bootstrap/state.js';
-import { buildActiveFooterText, buildIdleFooterText, FAILED_FOOTER_TEXT, getBridgeStatus } from '../bridge/bridgeStatusUtil.js';
+const buildActiveFooterText = (): string => ''; const buildIdleFooterText = (): string => ''; const FAILED_FOOTER_TEXT = ''; const getBridgeStatus = (): string => 'disabled'
 import { BRIDGE_FAILED_INDICATOR, BRIDGE_READY_INDICATOR } from '../constants/figures.js';
 import { useRegisterOverlay } from '../context/overlayContext.js';
 // eslint-disable-next-line custom-rules/prefer-use-keybindings -- raw 'd' key for disconnect, not a configurable keybinding action

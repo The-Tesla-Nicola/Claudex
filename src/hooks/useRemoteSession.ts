@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react'
-import { BoundedUUIDSet } from '../bridge/bridgeMessaging.js'
+// bridgeMessaging removed
+class BoundedUUIDSet { private s = new Set<string>(); add(v: string) { this.s.add(v) } has(v: string) { return this.s.has(v) } }
 import type { ToolUseConfirm } from '../components/permissions/PermissionRequest.js'
 import type { SpinnerMode } from '../components/Spinner/types.js'
 import {
@@ -30,8 +31,8 @@ import {
   type StreamingToolUse,
 } from '../utils/messages.js'
 import { generateSessionTitle } from '../utils/sessionTitle.js'
-import type { RemoteMessageContent } from '../utils/teleport/api.js'
-import { updateSessionTitle } from '../utils/teleport/api.js'
+const updateSessionTitle = async (..._args: unknown[]): Promise<void> => {}
+type RemoteMessageContent = unknown
 
 // How long to wait for a response before showing a warning
 const RESPONSE_TIMEOUT_MS = 60000 // 60 seconds

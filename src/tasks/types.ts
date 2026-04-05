@@ -7,7 +7,7 @@ import type { LocalAgentTaskState } from './LocalAgentTask/LocalAgentTask.js'
 import type { LocalShellTaskState } from './LocalShellTask/guards.js'
 import type { LocalWorkflowTaskState } from './LocalWorkflowTask/LocalWorkflowTask.js'
 import type { MonitorMcpTaskState } from './MonitorMcpTask/MonitorMcpTask.js'
-import type { RemoteAgentTaskState } from './RemoteAgentTask/RemoteAgentTask.js'
+
 
 export type TaskState =
   | LocalShellTaskState
