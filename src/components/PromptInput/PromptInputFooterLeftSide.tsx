@@ -24,7 +24,7 @@ import { isAgentSwarmsEnabled } from '../../utils/agentSwarmsEnabled.js';
 import { TeamStatus } from '../teams/TeamStatus.js';
 import { isInProcessEnabled } from '../../utils/swarm/backends/registry.js';
 import { useAppState, useAppStateStore } from 'src/state/AppState.js';
-import { getIsRemoteMode } from '../../bootstrap/state.js';
+import { getIsRemoteMode, getInitialMainLoopModel, getMainLoopModelOverride } from '../../bootstrap/state.js';
 import HistorySearchInput from './HistorySearchInput.js';
 import { usePrStatus } from '../../hooks/usePrStatus.js';
 import { KeyboardShortcutHint } from '../design-system/KeyboardShortcutHint.js';
@@ -401,16 +401,46 @@ function ModeIndicator({
   // Add "↓ to manage tasks" hint when panel has visible rows
   const hasCoordinatorTasks = "external" === 'ant' && getVisibleAgentTasks(tasks).length > 0;
 
-  // Tasks pill renders as a Box sibling (not a parts entry) so its
-  // click-target Box isn't nested inside <Text wrap="truncate"> — the
-  // reconciler throws on Box-in-Text. Computed here so the empty-checks
-  // below still treat "pill present" as non-empty.
-  const tasksPart = hasBackgroundTasks && !hasTeammatePills && !shouldHideTasksFooter(tasks, showSpinnerTree) ? <BackgroundTaskStatus tasksSelected={tasksSelected} isViewingTeammate={isViewingTeammate} teammateFooterIndex={teammateFooterIndex} isLeaderIdle={!isLoading} onOpenDialog={onOpenTasksDialog} /> : null;
-  if (parts.length === 0 && !tasksPart && !modePart && showHint) {
-    parts.push(<Text dimColor key="shortcuts-hint">
-        ? for shortcuts
-      </Text>);
-  }
+   // Tasks pill renders as a Box sibling (not a parts entry) so its
+   // click-target Box isn't nested inside <Text wrap="truncate"> — the
+   // reconciler throws on Box-in-Text. Computed here so the empty-checks
+   // below still treat "pill present" as non-empty.
+   const tasksPart = hasBackgroundTasks && !hasTeammatePills && !shouldHideTasksFooter(tasks, showSpinnerTree) ? <BackgroundTaskStatus tasksSelected={tasksSelected} isViewingTeammate={isViewingTeammate} teammateFooterIndex={teammateFooterIndex} isLeaderIdle={!isLoading} onOpenDialog={onOpenTasksDialog} /> : null;
+    if (parts.length === 0 && !tasksPart && !modePart && showHint) {
+      // Get model from environment variables (same method as startup screen - detectProvider function)
+      const useNvidia = process.env.CLAUDE_CODE_USE_NVIDIA === '1' || process.env.CLAUDE_CODE_USE_NVIDIA === 'true';
+      const useGemini = process.env.CLAUDE_CODE_USE_GEMINI === '1' || process.env.CLAUDE_CODE_USE_GEMINI === 'true';
+      const useGithub = process.env.CLAUDE_CODE_USE_GITHUB === '1' || process.env.CLAUDE_CODE_USE_GITHUB === 'true';
+      const useOpenAI = process.env.CLAUDE_CODE_USE_OPENAI === '1' || process.env.CLAUDE_CODE_USE_OPENAI === 'true';
+
+      let modelString = 'unknown';
+      if (useNvidia) {
+        modelString = process.env.NVIDIA_MODEL ?? process.env.OPENAI_MODEL ?? 'moonshotai/kimi-k2-instruct';
+      } else if (useGemini) {
+        modelString = process.env.GEMINI_MODEL ?? 'gemini-2.0-flash';
+      } else if (useGithub) {
+        modelString = process.env.OPENAI_MODEL ?? 'github:copilot';
+      } else if (useOpenAI) {
+        const rawModel = process.env.OPENAI_MODEL ?? 'gpt-4o';
+        const baseUrl = process.env.OPENAI_BASE_URL ?? 'https://api.openai.com/v1';
+        if (/deepseek/i.test(baseUrl) || /deepseek/i.test(rawModel))     modelString = 'DeepSeek';
+        else if (/openrouter/i.test(baseUrl))                            modelString = 'OpenRouter';
+        else if (/together/i.test(baseUrl))                              modelString = 'Together AI';
+        else if (/groq/i.test(baseUrl))                                  modelString = 'Groq';
+        else if (/mistral/i.test(baseUrl) || /mistral/i.test(rawModel))  modelString = 'Mistral';
+        else if (/azure/i.test(baseUrl))                                 modelString = 'Azure OpenAI';
+        else if (/localhost:11434/i.test(baseUrl))                       modelString = 'Ollama';
+        else if (/localhost:1234/i.test(baseUrl))                        modelString = 'LM Studio';
+        else modelString = 'OpenAI';
+      } else {
+        // Default to Anthropic/Claude
+        modelString = process.env.ANTHROPIC_MODEL ?? process.env.CLAUDE_MODEL ?? 'claude-sonnet-4-6';
+      }
+      
+      parts.push(<Text dimColor key="shortcuts-hint">
+          {modelString} • ? for shortcuts
+        </Text>);
+    }
 
   // Only replace the idle voice hint when there's something to say — otherwise
   // fall through instead of showing an empty Byline. "esc to clear" was removed
