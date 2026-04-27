@@ -216,6 +216,7 @@ Full guide: [telegram-gateway/README.md](telegram-gateway/README.md)
 - No Anthropic beta headers
 - Token output defaults to 32K — models that cap lower are handled gracefully
 - First-run skips Anthropic login if a provider profile is saved
+- Current model is displayed near the shortcuts hint in the prompt input (e.g., "moonshotai/kimi-k2-instruct • ? for shortcuts")
 
 ---
 
